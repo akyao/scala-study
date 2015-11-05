@@ -70,6 +70,18 @@ object Classes {
 
     // 高階関数
 
+    //lambda
+    def lambda = { x: Int => x + 1 }
+    def lambda2 = (x:Int) => x + 1
+    def lambda5(x:Int) = x + 1
+    val inc: Int => Int = x => x + 1 // incはIntを取りIntを返す関数であり、その実態はx => x  1
+    val inc2 = (x: Int) => x + 1
+
+    // closure
+    def fuck(): Unit ={
+      var incrementer = 1
+      def closure = (x: Int) => x + incrementer
+    }
     //Lists
 
     // Maps
