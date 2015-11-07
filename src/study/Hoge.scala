@@ -5,24 +5,25 @@ package study
  * http://scala-exercises.47deg.com/koans
  */
 
-class Point(xc: Int, yc: Int) {
-  var x: Int = xc
-  var y: Int = yc
-  def move(dx: Int, dy: Int) {
-    x = x + dx
-    y = y + dy
-  }
-  override def toString(): String = "(" + x + ", " + y + ")";
-}
 
 object Classes {
   def main(args: Array[String]) {
+
+    // Classes
+    class Point(xc: Int, yc: Int) {
+      var x: Int = xc
+      var y: Int = yc
+      def move(dx: Int, dy: Int) {
+        x = x + dx
+        y = y + dy
+      }
+      override def toString(): String = "(" + x + ", " + y + ")";
+    }
     val pt = new Point(1, 2)
     println(pt)
     pt.move(10, 10)
     println(pt)
 
-    // Classes
     class ClassWithValParameter(val name: String)
     class ClassWithVarParameter(var description: String)
 
@@ -83,11 +84,38 @@ object Classes {
       def closure = (x: Int) => x + incrementer
     }
     //Lists
+    def list(): Unit ={
+      val list = List(1, 2, 3)
+      val listString: List[String] = Nil
+      list(0)
+      val newList = list.map { i => i * 2}
+      val listRange = (1 to 5).toList
+      3 :: list //3,1,2,3
+    }
 
     // Maps
-
+    def map(): Unit ={
+      val myMap = Map("MI" -> "Michigan", "OH" -> "Ohio", "WI" -> "Wisconsin")
+      val myMap2 = Map(("MI", "Michigan"), ("OH", "Ohio"), ("WI", "Wisconsin")) //こっちの方が落ち着くなあ
+      val aNewMap = myMap + ("IL" -> "Illinois")
+      val mapValues = myMap.values //Iterable[String]
+      val aNewMap2 = myMap - "MI"
+      val aNewMap3 = myMap -- List("MI", "OH")
+      val aNewMap4 = myMap - ("MI", "OH") //おんなじになる
+    }
 
     //Sets
+    def set(): Unit = {
+      val mySet = Set("Michigan", "Ohio", "Wisconsin", "Iowa")
+      val aNewSet = mySet + "Illinois"
+      val gochaSet = Set("Michigan", "Ohio", 12)
+      val mySet2 = mySet - "Ohio"
+      val mySet3 = mySet -- List("Michigan", "Ohio")
+      val mySet4 = mySet - ("Michigan", "Ohio")
+      // intersect
+      // union
+
+    }
 
     // Formatting
 
@@ -145,7 +173,7 @@ object Classes {
 
     // Enumerations
 
-    // コンストラクター
+    // コンストラクター　複数のコンストラクターの場合
   }
 }
 
