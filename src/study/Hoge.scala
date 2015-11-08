@@ -1,5 +1,6 @@
 package study
 
+
 /**
  * Created by akyao on 2015/11/04.
  * http://scala-exercises.47deg.com/koans
@@ -118,12 +119,88 @@ object Classes {
     }
 
     // Formatting
+    def formatting(): Unit ={
+      val s = "Hello World"
+      "Application %s".format(s)
+    }
 
     // パターンマッチ
+    def patternMatch(): Unit ={
+      val stuff = "blue"
+      val myStuff = "blue" match {
+        case "red" => println("RED"); 1
+        case "blue" => println("BLUE"); 2
+        case "green" => println("GREEN"); 3
+        case _ => println(stuff); 0 //case _ will trigger if all other cases fail.
+      }
+
+      def goldilocks1(expr: Any) = expr match {
+        case ("porridge", _) => "eating"
+        case ("chair", "Mama") => "sitting"
+        case ("bed", "Baby") => "sleeping"
+        case _ => "what?"
+      }
+
+      def goldilocks2(expr: Any) = expr match {
+        case ("porridge", bear) => bear + " said someone's been eating my porridge"
+        case ("chair", bear) => bear + " said someone's been sitting in my chair"
+        case ("bed", bear) => bear + " said someone's been sleeping in my bed"
+        case _ => "what?"
+      }
+
+      val EatingRegularExpression = """Eating Alert: bear=([^,]+),\s+source=(.+)""".r //.r turns a String to a regular expression
+      val SittingRegularExpression = """Sitting Alert: bear=([^,]+),\s+source=(.+)""".r
+      val SleepingRegularExpression = """Sleeping Alert: bear=([^,]+),\s+source=(.+)""".r
+
+      def goldilocks3(expr: String) = expr match {
+        case (EatingRegularExpression(bear, source)) => "%s said someone's been eating my %s".format(bear, source)
+        case (SittingRegularExpression(bear, source)) => "%s said someone's been sitting on my %s".format(bear, source)
+        case (SleepingRegularExpression(bear, source)) => "%s said someone's been sleeping in my %s".format(bear, source)
+        case _ => "what?"
+      }
+
+      // ?意味不明
+      def patternEquals(i: Int, j: Int) = j match {
+        case `i` => true
+        case _ => false
+      }
+//      patternEquals(3, 3) should be(true)
+//      patternEquals(7, 9) should be(false)
+//      patternEquals(9, 9) should be(true)
+
+      // ?意味不明
+      val secondElement = List(1, 2, 3) match {
+        case x :: xs => xs.head
+        case _ => 0
+      }
+    }
 
     // Caseクラス
+    // 各種メソッド(equals,apply etc)と、コンパニオンオブジェクトが勝手にできる & serializable
+    // http://www.ne.jp/asahi/hishidama/home/tech/scala/class.html#h_case_class
+    def caseClass(): Unit ={
+      abstract class Term
+      case class Var(name: String) extends Term
+      case class Fun(arg: String, body: Term) extends Term
+      case class App(f: Term, v: Term) extends Term
+      Fun("x", Fun("y", App(Var("x"), Var("y"))))
+    }
 
     // Range
+    def range(): Unit ={
+      val zeroTo10 = Range(0, 10)
+      val oneTo10Step3 = Range(1, 10, 3)
+    }
+
+    // Partially Applied Functions
+    def partiallyAppliedFunc(): Unit ={
+      def sum(a: Int, b: Int, c: Int) = a + b + c
+      val sum3 = sum _
+      // sum3: (Int, Int, Int) => Int = <function3>
+
+      val sumC = sum(1, 10, _: Int)
+      // sumC: Int => Int = <function1>
+    }
 
     // partial FUnctions
 
