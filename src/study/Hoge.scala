@@ -11,60 +11,68 @@ object Classes {
   def main(args: Array[String]) {
 
     // Classes
-    class Point(xc: Int, yc: Int) {
-      var x: Int = xc
-      var y: Int = yc
-      def move(dx: Int, dy: Int) {
-        x = x + dx
-        y = y + dy
+    def class定義(): Unit ={
+      class Point(xc: Int, yc: Int) {
+        var x: Int = xc
+        var y: Int = yc
+        def move(dx: Int, dy: Int) {
+          x = x + dx
+          y = y + dy
+        }
+        override def toString(): String = "(" + x + ", " + y + ")";
       }
-      override def toString(): String = "(" + x + ", " + y + ")";
+      val pt = new Point(1, 2)
+      println(pt)
+      pt.move(10, 10)
+      println(pt)
     }
-    val pt = new Point(1, 2)
-    println(pt)
-    pt.move(10, 10)
-    println(pt)
 
-    class ClassWithValParameter(val name: String)
-    class ClassWithVarParameter(var description: String)
+    def varとval(): Unit ={
+      class ClassWithValParameter(val name: String)
+      class ClassWithVarParameter(var description: String)
 
-    // varは変更可能
-    val varClass = new ClassWithVarParameter("Flying character")
-    varClass.description = "Flying white character"
-
-    // Option
-    val someValue: Option[Double] = Some(20.0)
-    val value = someValue match {
-      case Some(v) => v
-      case None => 0.0
+      // varは変更可能
+      val varClass = new ClassWithVarParameter("Flying character")
+      varClass.description = "Flying white character"
     }
-    // OptionってNullチェックを強制させただけとは違うのかねえ。チェック例外をなくしたくせにぬるぽチェックだけ強制化した感じ
 
-    // Objects(singleton的な)
-    object Greeting {
-      def english = "Hi"
-      def japan = "yo"
+    def option(): Unit ={
+      val someValue: Option[Double] = Some(20.0)
+      val value = someValue match {
+        case Some(v) => v
+        case None => 0.0
+      }
+      // OptionってNullチェックを強制させただけとは違うのかねえ。チェック例外をなくしたくせにぬるぽチェックだけ強制化した感じ
     }
-    Greeting.english
 
-    // コンパニオンオブジェクト classに対するfactory的な
-    class Movie(val name: String, val year: Short)
 
-    object Movie {
-      def academyAwardBestMoviesForYear(x: Short) = {
-        //These are match statement, more powerful than Java switch statements!
-        x match {
-          case 1930 => Some(new Movie("All Quiet On the Western Front", 1930))
-          case 1931 => Some(new Movie("Cimarron", 1931))
-          case 1932 => Some(new Movie("Grand Hotel", 1932))
-          case _ => None
+    def objects(){
+      // Objects(singleton的な)
+      object Greeting {
+        def english = "Hi"
+        def japan = "yo"
+      }
+      Greeting.english
+
+      // コンパニオンオブジェクト classに対するfactory的な
+      class Movie(val name: String, val year: Short)
+
+      object Movie {
+        def academyAwardBestMoviesForYear(x: Short) = {
+          //These are match statement, more powerful than Java switch statements!
+          x match {
+            case 1930 => Some(new Movie("All Quiet On the Western Front", 1930))
+            case 1931 => Some(new Movie("Cimarron", 1931))
+            case 1932 => Some(new Movie("Grand Hotel", 1932))
+            case _ => None
+          }
         }
       }
+      Movie.academyAwardBestMoviesForYear(1932).get.name
+      // コンパニオンオブジェクトとclass間のスコープについて
+      // privateメソッドもよびだせる。
     }
-    Movie.academyAwardBestMoviesForYear(1932).get.name
-    // コンパニオンオブジェクトとclass間のスコープについて
-    // privateメソッドもよびだせる。
-
+    
     // Tuple
     val t = (1, "hello", Console)
     val t3 = new Tuple3(1, "hello", Console) //同じ意味
@@ -202,15 +210,78 @@ object Classes {
       // sumC: Int => Int = <function1>
     }
 
-    // partial FUnctions
+    def partialFunctions(): Unit ={
+      //http://yuroyoro.hatenablog.com/entry/20100705/1278328898
+      //直訳すると部分関数ですが、これはなにかっていうと「特定の引数に対しては結果を返すけど、結果を返せない引数もあるような中途半端な関数」です。
+
+      // う、うーん。。これはあと回し
+    }
 
     // Implicits
+    def implicits(): Unit ={
+      //http://qiita.com/Miyatin/items/f70cf68e89e4367fcf2e
 
-    // Traits
+      // 暗黙的な型変換
+      implicit def floatToInt(f: Float) = f.toInt
+      implicit def stringToInt(s: String) = s.toInt
+      def logInt(i: Int) = println(i)
+      logInt(1)
+      logInt(0.2f)
+      logInt("fuck")
 
-    // For
+      // 暗黙的な型変換 実際例
+      import scala.collection.JavaConversions._
+      val javaList: java.util.List[Int] = new java.util.ArrayList[Int]()
+      javaList.add(1)
+      println(javaList.map(_ * 100).sum) //ここ！
 
-    // InFIX
+      // TODO implicit引数　変数
+    }
+
+    def traits(): Unit = {
+      // インターフェース的な？
+      trait Similarity {
+        def isSimilar(x: Any): Boolean
+
+        def isNotSimilar(x: Any): Boolean = !isSimilar(x)
+      }
+      class Point(xc: Int, yc: Int) extends Similarity {
+        var x: Int = xc
+        var y: Int = yc
+
+        def isSimilar(obj: Any) =
+          obj.isInstanceOf[Point] &&
+            obj.asInstanceOf[Point].x == x
+      }
+      // 一つのtraitを継承するときはextends 複数の場合は二個目以降をwith
+
+    }
+
+    def for文(): Unit ={
+      var sum = 0
+      for (i <- Range(0, 10))
+        sum += i
+
+      for {x <- Range(1, 10)
+           y <- Range(1, 10)} yield (print (x * y))
+
+      val nums = List(List(1), List(2), List(3), List(4), List(5))
+      val result = for {
+        numList <- nums
+        num <- numList
+        if(num%2 == 0)
+      } yield(num)
+    }
+
+    def operator(): Unit ={
+      // 前置演算子(前置きメソッド)
+      class Stereo {
+        def unary_+ = "on"
+        def unary_- = "off"
+      }
+      val stereo = new Stereo
+      print(+stereo)
+    }
 
     // Infix Types
 
