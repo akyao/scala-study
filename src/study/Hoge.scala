@@ -1,5 +1,7 @@
 package study
 
+import scala.collection.mutable
+
 
 /**
  * Created by akyao on 2015/11/04.
@@ -72,7 +74,7 @@ object Classes {
       // コンパニオンオブジェクトとclass間のスコープについて
       // privateメソッドもよびだせる。
     }
-    
+
     // Tuple
     val t = (1, "hello", Console)
     val t3 = new Tuple3(1, "hello", Console) //同じ意味
@@ -284,12 +286,57 @@ object Classes {
     }
 
     // Infix Types
+    def infixTypes(): Unit ={
+      case class Person(name: String) {
+        def loves(person: Person) = new Loves(this, person)
+      }
 
-    // mutable
+      class Loves[A, B](val a: A, val b: B)
+
+      def announceCouple(couple: Person Loves Person) = {
+        //Notice our type: Person loves Person!
+        couple.a.name + " is in love with " + couple.b.name
+      }
+
+      val romeo = new Person("Romeo")
+      val juliet = new Person("Juliet")
+
+      print(romeo loves juliet)
+    }
+
+    def mutableCollection(): Unit ={
+
+      val myMap = mutable.Map("MI" -> "Michigan", "OH" -> "Ohio", "WI" -> "Wisconsin", "IA" -> "Iowa")
+      myMap += "OR" -> "Oregon"
+
+      val mySet = mutable.Set("Michigan", "Ohio", "Wisconsin", "Iowa")
+      mySet += "Oregon"
+    }
 
     // sequence
+    def sequenceAndArray(): Unit ={
+      // collectionの子クラスとして、Map, Set, そしてSeq。ListはSeqの子
+      val myseq = for (v <- 1 to 10 if v % 3 == 0) yield v //3,6,9
+
+      // SeqもArrayも同じように絞りこみか
+      val seq1 = Seq("hello", "to", "you")
+      val seq1Filtered = seq1.filter(_.length > 2)
+      val arr1 = Array("hello", "to", "you", "again")
+      val arr11Filtered = arr1.filter(_.length > 3)
+    }
 
     // iterable
+    def iterable(): Unit ={
+      // http://scala-exercises.47deg.com/koans#iterables
+      val xs1 = Set(3, 2, 1, 4, 5, 6, 7)
+      val ys1 = Set(7, 2, 1, 4, 5, 6, 3)
+      print(xs1.sameElements(ys1)) //true
+
+      val xs1b = Set(1, 2, 3)
+      val ys1b = Set(3, 2, 1)
+      print(xs1b.sameElements(ys1b)) //false ?醜い
+      print(xs1b == ys1b) //true
+    }
 
     // named default arg
 
