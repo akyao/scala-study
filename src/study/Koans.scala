@@ -338,6 +338,31 @@ object Classes {
       print(xs1b == ys1b) //true
     }
 
+    def traversables(): Unit ={
+      // 走査可能
+      // traversable <- Iterable <- Seq, Set, Map
+      // traversableのメソッドはforeachだけ
+
+      val list = List(4, 6, 7, 8, 9, 13, 14)
+      val result1 = list.collect {
+        case x: Int if (x % 2 == 0) => x * 3
+      }
+
+
+      val partialFunction1: PartialFunction[Int, Int] = {
+        case x: Int if x % 2 == 0 => x * 3
+      }
+      val partialFunction2: PartialFunction[Int, Int] = {
+        case y: Int if y % 2 != 0 => y * 4
+      }
+      val result2 = list.collect(partialFunction1 orElse partialFunction2)
+
+      list.foreach(num => println(num * 4))
+
+      val array = Array(87, 44, 5, 4, 200, 10, 39, 100)
+      print(array.filter(_ < 100))
+    }
+
     // named default arg
 
     // manifests
